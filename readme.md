@@ -1,4 +1,4 @@
-#Roger-skyline-1  
+# Roger-skyline-1  
 ### Синопсис  
 Хост: LMDE (Debian 10), гость: Debian 10.
 ### Подготовка
