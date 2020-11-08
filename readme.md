@@ -12,8 +12,11 @@ ssh-manager.
 типа адаптера позволит использовать как Интернет, так и ssh.  
 Подключаемся к гостевой системе через root.  
 Устанавливаем sudo и vim:  
-`apt-get install sudo`  
-`apt-get install vim`  
+```shell script
+#from guest root
+apt-get install sudo
+apt-get install vim
+```
 Добавляем созданного пользователя (не root) в список пользователей, которым
 разрешено использовать команду sudo:  
 `sed -ie '/^# Allow members/i username ALL=(ALL:ALL) ALL' /etc/sudoers`  
@@ -70,3 +73,46 @@ iface enp0s3 inet static
         #from host  
         ssh username@192.168.1.X
         ```
+### Редактируем ssh  
+Если у нас на хосте ещё нет ssh-ключей, самое время сгенерировать новую пару:  
+```shell script
+#from host
+ssh-keygen -t rsa
+```
+Публичный ключ будет лежать в папке `~/.ssh/`, если вы не выбрали другую во время генерации.
+Теперь нужно передать публичный ключ гостевой системе, это пригодится в дальнейшем.  
+```shell script
+#from host
+ssh-copy-id -i ~/.ssh/id_rsa.pub username@host
+```
+В моем случае это `ssh-copy-id -i ~/.ssh/id_rsa.pub barrett@192.168.1.66`.  
+Этот ключ будет сохранен на гостевой машине по адресу `/home/username/.ssh/authorized_keys`.  
+Отредактируем порт ssh-подключения. Согласно IANA целесообразнее всего будет использовать
+порты от 49152 до 65535. Я возьму 50012. В файле `/etc/ssh/sshd_config` на гостевой
+ машине заменим `#Port 22` на `Port 50012`.
+Теперь подключиться к гостю можно с прямым указанием порта:  
+`ssh username@host -p portnumber`  
+На этом редактирование `sshd_config` не закончено. Давайте зададим `PubkeyAuthentication yes`.
+Теперь по ssh могут подключаться только те, чьи пары ключей совпадают. Но есть один
+нюанс, если скопировать папку .ssh, которая на текущий момент лежит в /home/ нашего
+юзера, в /root/, то есть дать пользователю root тот же ключ, то мы будем авторизованы.
+Ранее этого не происходило, требовался пароль, но даже с ним войти под root было нельзя.
+Немедленно ликвидируем эту дыру! Задаем `PermitRootLogin no`.  
+Финальный список изменений:  
+```shell script
+Port 50012                              #new ssh port
+HostKey /etc/ssh/ssh_host_rsa_key       #адреса ssh ключей
+HostKey /etc/ssh/ssh_host_ecdsa_key     #адреса ssh ключей
+HostKey /etc/ssh/ssh_host_ed25519_key   #адреса ssh ключей
+PermitRootLogin no                      #запрет на подключение под root
+PubkeyAuthentication yes                #включить авторизацию по ключам
+PasswordAuthentication no               #выключить авторизацию по паролю
+ChallengeResponseAuthentication no      #вообще выключить пароли
+UsePAM no                               #вообще-вообще выключить пароли
+AuthenticationMethods publickey         #добавить после UseRAM no
+PrintMotd no                            #убрать непонятный текст после подключения по ssh
+PrintLastLog yes                        #показывает дату последнего подключения
+TCPKeepAlive no                         #не относится к заданию, используется вместе со строчками ниже
+ClientAliveInterval 20                  #каждые 20 сек посылает клиенту запрос
+ClientAliveCountMax 3                   #3 раза, чтобы получить ответ, иначе рвёт соединение
+```
