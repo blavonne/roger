@@ -130,6 +130,6 @@ sudo ufw enable
 ```shell script
 sudo ufw allow http
 sudo ufw allow https
-sudo ufw allow portnumber   #тот, который мы изменили
+sudo ufw allow portnumber               #тот, который мы изменили
 sudo ufw reload
 ```
