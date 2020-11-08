@@ -126,3 +126,10 @@ sudo apt-get install ufw
 sudo ufw status
 sudo ufw enable
 ```
+Необходимо разрешить доступ только сервисам извне. Таких всего 3: ssh, http и https.  
+```shell script
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw allow portnumber   #тот, который мы изменили
+sudo ufw reload
+```
