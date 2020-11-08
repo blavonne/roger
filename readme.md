@@ -109,11 +109,20 @@ PubkeyAuthentication yes                #включить авторизацию
 PasswordAuthentication no               #выключить авторизацию по паролю
 ChallengeResponseAuthentication no      #вообще выключить пароли
 UsePAM no                               #вообще-вообще выключить пароли
-AuthenticationMethods publickey         #добавить после UseRAM no
+AuthenticationMethods publickey         #добавить эту строку после UsePAM no
 PrintMotd no                            #убрать непонятный текст после подключения по ssh
 PrintLastLog yes                        #показывает дату последнего подключения
 TCPKeepAlive no                         #не относится к заданию, используется вместе со строчками ниже
 ClientAliveInterval 20                  #каждые 20 сек посылает клиенту запрос
 ClientAliveCountMax 3                   #3 раза, чтобы получить ответ, иначе рвёт соединение
 ```
-Не забываем после каждого изменения перезапускать sshd: `service sshd restart`.
+Не забываем после каждого изменения перезапускать sshd: `sudo service sshd restart`.
+### Настройка FIREWALL  
+За настройку firewall отвечает стандарный инструмент iptables. Но мы будем использовать
+утилиту ufw для упрощения работы.
+```shell script
+#from guest
+sudo apt-get install ufw
+sudo ufw status
+sudo ufw enable
+```
