@@ -14,10 +14,10 @@ echo -e "${sgreen}[ufw is installed]${egreen}"
 
 sed -ie '/^# Allow members/i barrett ALL=(ALL:ALL) ALL' /etc/sudoers
 
-sed -ie 's/#Port 22/Port 50000' /etc/ssh/sshd_config
-sed -ie 's/#PermitRootLogin prohibit-password/PermitRootLogin no' /etc/ssh/sshd_config
-sed -ie 's/#PasswordAuthentification yes/PasswordAuthentification no' /etc/ssh/sshd_config
-sed -ie 's/#PubkeyAuthentication/PubkeyAuthentication' /etc/ssh/sshd_config
+sed -ie 's/#Port 22/Port 50000/' /etc/ssh/sshd_config
+sed -ie 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+sed -ie 's/#PasswordAuthentification yes/PasswordAuthentification no/' /etc/ssh/sshd_config
+sed -ie 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config
 
 touch /etc/network/interfaces.d/enp0s8
 echo 'iface enp0s8 inet static' > /etc/network/interfaces.d/enp0s8
