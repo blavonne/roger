@@ -31,7 +31,7 @@ touch /etc/network/interfaces.d/enp0s8
 echo -e "${sgreen}[enp0s8-config created.]${egreen}"
 echo 'auto enp0s8' >> /etc/network/interfaces
 echo 'iface enp0s8 inet static' >> /etc/network/interfaces.d/enp0s8
-echo 'address 192.168.1.42' >> /etc/network/interfaces.d/enp0s8
+echo 'address 192.168.56.2' >> /etc/network/interfaces.d/enp0s8
 echo 'netmask 255.255.255.252' >> /etc/network/interfaces.d/enp0s8
 echo -e "${sgreen}[enp0s8-config set.]${egreen}"
   ;;
