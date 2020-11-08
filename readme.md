@@ -119,7 +119,7 @@ ClientAliveCountMax 3                   #3 раза, чтобы получить
 Не забываем после каждого изменения перезапускать sshd: `sudo service sshd restart`.
 ### Настройка FIREWALL  
 За настройку firewall отвечает стандарный инструмент iptables. Но мы будем использовать
-утилиту ufw для упрощения работы.
+утилиту [ufw](https://1cloud.ru/help/security/ispolzovanie-utility-ufw-na-inux) для упрощения работы.
 ```shell script
 #from guest
 sudo apt-get install ufw
@@ -133,3 +133,4 @@ sudo ufw allow https
 sudo ufw allow portnumber               #тот, который мы изменили
 sudo ufw reload
 ```
+### Защита от DOS  
