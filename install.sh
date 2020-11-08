@@ -15,14 +15,20 @@ echo -e "${sgreen}[ufw is installed]${egreen}"
 sed -ie '/^# Allow members/i barrett ALL=(ALL:ALL) ALL' /etc/sudoers
 
 sed -ie 's/#Port 22/Port 50000/' /etc/ssh/sshd_config
+echo -e "${sgreen}[Port changed.]${egreen}"
 sed -ie 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+echo -e "${sgreen}[PermitRootLogin changed.]${egreen}"
 sed -ie 's/#PasswordAuthentification yes/PasswordAuthentification no/' /etc/ssh/sshd_config
+echo -e "${sgreen}[PasswordAuthentification changed.]${egreen}"
 sed -ie 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config
+echo -e "${sgreen}[PubkeyAuthentication changed.]${egreen}"
 
 touch /etc/network/interfaces.d/enp0s8
+echo -e "${sgreen}[enp0s8-config created.]${egreen}"
 echo 'iface enp0s8 inet static' > /etc/network/interfaces.d/enp0s8
 echo 'address 192.168.1.42' >> /etc/network/interfaces.d/enp0s8
 echo 'netmask 255.255.255.252' >> /etc/network/interfaces.d/enp0s8
+echo -e "${sgreen}[enp0s8-config set.]${egreen}"
 
 echo -e "${sgreen}[Confuguration is done. Reboot? y/n]${egreen}"
 read item
