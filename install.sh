@@ -18,7 +18,7 @@ sed -ie 's/#Port 22/Port 50000/' /etc/ssh/sshd_config
 echo -e "${sgreen}[Port changed.]${egreen}"
 sed -ie 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 echo -e "${sgreen}[PermitRootLogin changed.]${egreen}"
-sed -ie 's/#PasswordAuthentification yes/PasswordAuthentification no/' /etc/ssh/sshd_config
+sed -ie 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 echo -e "${sgreen}[PasswordAuthentification changed.]${egreen}"
 sed -ie 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config
 echo -e "${sgreen}[PubkeyAuthentication changed.]${egreen}"
