@@ -59,7 +59,7 @@ iface enp0s3 inet static
 по ssh приходилось с хоста выполнять команду `ping 192.168.1.1`, и лишь после этого
 подключение имело успех.  
 Да, кстати, если сеть настроена правильно, то команда ping должна передавать пакеты.
-Любой другой ответ означает ошибку настройки сети.
+Любой другой ответ означает ошибку настройки сети. Возможно, натолкнёт на [размышления](http://jodies.de/ipcalc?host=192.168.1.1&mask1=24&mask2=30).
 * **_Netmask_** /30 = 255.255.255.252 по заданию.  
 * **_Gateway_** -- шлюз, пишем сюда адрес роутера.  
 Без этих трёх компонентов ничего работать не будет (правильно).  
@@ -106,6 +106,7 @@ HostKey /etc/ssh/ssh_host_ecdsa_key     #адреса ssh ключей
 HostKey /etc/ssh/ssh_host_ed25519_key   #адреса ssh ключей
 PermitRootLogin no                      #запрет на подключение под root
 PubkeyAuthentication yes                #включить авторизацию по ключам
+AuthorizedKeysFile                      #раскоменнтировать
 PasswordAuthentication no               #выключить авторизацию по паролю
 ChallengeResponseAuthentication no      #вообще выключить пароли
 UsePAM no                               #вообще-вообще выключить пароли
@@ -119,7 +120,7 @@ ClientAliveCountMax 3                   #3 раза, чтобы получить
 Не забываем после каждого изменения перезапускать sshd: `sudo service sshd restart`.
 ### Настройка FIREWALL  
 За настройку firewall отвечает стандарный инструмент iptables. Но мы будем использовать
-утилиту [ufw](https://1cloud.ru/help/security/ispolzovanie-utility-ufw-na-inux) для упрощения работы.
+утилиту [ufw](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-18-04-ru) для упрощения работы.
 ```shell script
 #from guest
 sudo apt-get install ufw
@@ -128,9 +129,11 @@ sudo ufw enable
 ```
 Необходимо разрешить доступ только сервисам извне. Таких всего 3: ssh, http и https.  
 ```shell script
-sudo ufw allow http
-sudo ufw allow https
-sudo ufw allow portnumber               #тот, который мы изменили
-sudo ufw reload
+sudo ufw default deny incoming          #запретить входящие
+sudo ufw default allow outgoing         #разрешить исходящие
+sudo ufw allow http                     #разрешить http
+sudo ufw allow https                    #разрешить https
+sudo ufw allow %portnumber%/tcp         #разрешить ssh-порт, который мы изменили, по протоколу tcp
+sudo ufw reload                         #применить изменения
 ```
 ### Защита от DOS  
