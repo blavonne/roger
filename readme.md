@@ -101,7 +101,14 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub username@host
 Теперь по ssh могут подключаться только те, чьи пары ключей совпадают. Но есть один
 нюанс, если скопировать папку .ssh, которая на текущий момент лежит в /home/ нашего
 юзера, в /root/, то есть дать пользователю root тот же ключ, то мы будем авторизованы.
-Ранее этого не происходило, требовался пароль, но даже с ним войти под root было нельзя.
+Ранее этого не происходило, требовался пароль, но даже с ним войти под root было нельзя.  
+Давайте проверим это.
+```shell script
+#from guest
+sudo cp -r /home/username/.ssh/ /root/
+#from host
+ssh root@host -p 50012
+```
 Немедленно ликвидируем эту дыру! Задаем `PermitRootLogin no`.  
 Финальный список изменений:  
 ```shell script
@@ -159,9 +166,10 @@ sudo fail2ban enable
 Далее есть три папки: action.d, jail.d и filter.d, в каждой из них лежат конфигурации,
 отвечающие за конкретный пункт "тюремного блока". "Тюремный блок", как правило,
 выглядит как:  
-```
+```shell script
+#/etc/fail2ban/jail.d/sshd.conf
 [sshd]                                  #произвольное название, либо одно из стандартных, тогда оно перезапишется
-enabled = false/true                    #включено/выключено
+enabled = true                          #включено/выключено (false/true)
 port = 50012                            #номер порта
 filter = sshd                           #какой применить фильтр
 logpath = /var/log/auth.log             #какой лог смотреть
@@ -176,6 +184,34 @@ findtime = 3600                         #по умолчанию 600, интер
 нарушителя банится методом **_banaction_** на _**bantime**_.  
 Файлы конфигураций должны иметь разрешение `.conf`, кроме одного файла - `jail.local`. "Тюрьмы"
 можно хранить как в папке `jail.d `отдельно друг от друга (1 конфиг = 1 файл), так и
-все вместе в `jail.local`. Это очень похоже на `/etc/network/interfaces` и `/etc/network/interfaces.d/`.
+все вместе в `jail.local`. Это очень похоже на `/etc/network/interfaces` и `/etc/network/interfaces.d/`.  
+Ещё понадобится изменить конфигурацию по умолчанию.  
+```shell script
+#/etc/fail2ban/jail.local
+[DEFAULT]
+ignoreip = 192.168.1.67/30              #игнорировать подсеть/ip
+```
+Здесь 192.168.1.67/30 - это адрес широковещательной сети, указанный в `ip a` гостя.
+Данная настройка есть в jail.conf, но лучше переназначить её в jail.local, чётко контролируя, какие
+ip не будут подвергаться фильтрации. Как проверить, всё ли работает?  
+```shell script
+#/etc/fail2ban/jail.local
+[DEFAULT]
+ignoreip = your_guest_ip
+#from guest
+sudo service fail2ban restart
+#from host repeat 4 times
+ssh not_existed_user@host -p 50012       #подключаемся с несуществующего пользователя 4 раза
+```
+4 раза -- больше, чем наш maxretry, результатом выполнения команды должно стать:  
+`ssh: connect to host 192.168.1.66 port 50012: Connection refused`  
+Тем временем fail2ban забанил наш хост, в чём можно убедиться самим:  
+```shell script
+#from guest
+sudo tail /var/log/fail2ban.log
+#result
+2020-11-09 19:29:02,678 fail2ban.actions        [613]: NOTICE  [sshd] Ban 192.168.1.65
+```
+Где 192.168.1.65 -- это ip хоста. Через 10 минут бан будет снят. И не забывайте после
+изменения настроек делать service fail2ban restart!  
 
-Сначала защитим наш ssh-порт.
