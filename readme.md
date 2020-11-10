@@ -287,7 +287,7 @@ ignoreregex =
 его извлечь.  
 Облегчить работу поможет сайт [Проверка регулярных выражений](https://planetcalc.ru/708/),
 а также встроенный инструмент fail2ban-regex. Чтобы им воспользоваться, создайте
-фильтр /etc/fail2ban/filter.d/filtername.conf, после чего выполните `sudo fail2ban-regex /var/log/apache2/access.log /etc/fail2ban/filter.d/filtername.conf`.
+фильтр `/etc/fail2ban/filter.d/filtername.conf`, после чего выполните `sudo fail2ban-regex /var/log/apache2/access.log /etc/fail2ban/filter.d/filtername.conf`.
 Первый аргумент - это лог, который мы проверяем, второй файл - фильтр, т.е. регулярное выражение,
 которое мы применяем к логу.
 ```shell script
