@@ -178,12 +178,9 @@
 		function chacha()
 		{
 			alert("qwe!");
-			window.setInterval(function(ev) {
-				while (stay_alive())
-				{
+			window.setInterval(function() {
+				if (stay_alive())
 					next_gen();
-				}
-				return ;	
 			}, 1000);
 		}
 	</script>
