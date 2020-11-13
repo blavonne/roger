@@ -49,9 +49,9 @@
 
 			for (i = 0; i < n; i++)
 			{
-				friends = 0;
 				for (j = 0; j < n; j++)
 				{
+					friends = 0;
 					if (elements[i][j].classList.contains('alive'))
 					{
 						if ((i - 1 >= 0) && (j - 1 >= 0))
