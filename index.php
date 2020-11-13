@@ -202,14 +202,17 @@
 		}
 		function res_map()
 		{
-			for (i = 0; i < n; i++)
+			if (currentInterval === null)
 			{
-				for (j = 0; j < n; j++)
+				for (i = 0; i < n; i++)
 				{
-					if (elements[i][j].classList.contains('alive'))
+					for (j = 0; j < n; j++)
 					{
-						elements[i][j].classList.remove('alive');
-						elements[i][j].classList.add('dead');
+						if (elements[i][j].classList.contains('alive'))
+						{
+							elements[i][j].classList.remove('alive');
+							elements[i][j].classList.add('dead');
+						}
 					}
 				}
 			}
