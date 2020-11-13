@@ -32,6 +32,7 @@
 				map.appendChild(elements[i][j]);
 			}
 		}
+		currentInterval = null;
 		for (i = 0; i < n; i++)
 		{
 			for (j = 0; j < n; j++)
@@ -177,7 +178,6 @@
 			}
 			return false;
 		}
-		currentInterval = null;
 		function chacha()
 		{
 			if (currentInterval === null)
