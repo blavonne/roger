@@ -54,7 +54,7 @@
 				{
 					if (elements[i][j].classList.contains('alive'))
 					{
-						if (i - 1 >= 0 && j - 1 >= 0)
+						if ((i - 1 >= 0) && (j - 1 >= 0))
 						{
 							if (elements[i - 1][j - 1].classList.contains('alive'))
 								friends++;
@@ -64,7 +64,7 @@
 							if (elements[i][j - 1].classList.contains('alive'))
 								friends++;
 						}
-						if (i + 1 < n && j - 1 >= 0)
+						if ((i + 1 < n) && (j - 1 >= 0))
 						{
 							if (elements[i + 1][j - 1].classList.contains('alive'))
 								friends++;
@@ -74,7 +74,7 @@
 							if (elements[i - 1][j].classList.contains('alive'))
 								friends++;
 						}
-						if (i - 1 >= 0 && j + 1 < n)
+						if ((i - 1 >= 0) && (j + 1 < n))
 						{
 							if (elements[i - 1][j + 1].classList.contains('alive'))
 								friends++;
@@ -89,12 +89,12 @@
 							if (elements[i + 1][j].classList.contains('alive'))
 								friends++;
 						}
-						if (i + 1 < n && j + 1 < n)
+						if ((i + 1 < n) && (j + 1 < n))
 						{
 							if (elements[i + 1][j + 1].classList.contains('alive'))
 								friends++;
 						}
-						if (friends < 2 || friends > 3)
+						if ((friends < 2) || (friends > 3))
 							elements[i][j].classList.add('can_die');
 					}
 					else if (elements[i][j].classList.contains('dead'))
