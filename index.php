@@ -38,6 +38,8 @@
 			{
 				elements[i][j].addEventListener('click', function(live)
 				{
+					if (currentInterval !== nulL)
+						return ;
 					live.target.classList.remove('dead');
 					live.target.classList.add('alive');
 				}, false);
