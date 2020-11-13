@@ -170,6 +170,9 @@ sudo ufw allow https                    #разрешить https
 sudo ufw allow %portnumber%/tcp         #разрешить ssh-порт, который мы изменили, по протоколу tcp
 sudo ufw reload                         #применить изменения
 ```
+Если ещё опция limit, она ограничивает доступ по ip юзера, который стучится в порт более 6 раз
+в течение 30 секунд. Мне кажется, использовать limit для http и https - довольно неоднозначная идея,
+а для защиты ssh мы всё равно будем использовать fail2ban.  
 ### Защита от DOS  
 #### База и защита ssh
 Для защиты установим приложение fail2ban. Оно позволяет по логам из /var/log/ или любой другой
@@ -300,7 +303,7 @@ Lines: 2726 lines, 0 ignored, 2714 matched, 12 missed
 ```
 Конечно, количество совпадений не гарантирует правильный результат, но само их наличие
 означает, что вы на верном пути. Не забываем `sudo service fail2ban restart`!
-Настало время атаковать сервер с помощью [Slowloris](https://github.com/gkbrk/slowloris). Клонируем
+Настало время атаковать сервер с помощью [Slowloris](https://github.com/gkbrk/slowloris) ([видео](https://www.youtube.com/watch?v=F7nk7LUQ5bw&t=113s&ab_channel=TheCodeby)). Клонируем
 репозиторий на хост. Для наглядности установим на гостевую машину tcpdump:  
 ```shell script
 #from guest
@@ -323,6 +326,115 @@ sudo cat /var/log/fail2ban.log | grep Ban
 sudo fail2ban-client status your-jail-rule-name
 #result:
 Banned IP list:   192.168.1.65
+#undo ban:
+sudo fail2ban-client set http-apache-protect unbanip 192.168.1.65
 ```
-Или зайдем на сайт сервера -- сейчас нас туда не пустит, т.к. мы в бане. Slowloris отбит!  
-
+Или зайдем на сайт сервера -- сейчас нас туда не пустит, т.к. мы в бане. Slowloris отбит!
+## Защита от сканирования портов
+```shell script
+#from guest
+sudo apt-get install portsentry -y
+#/etc/default/portsentry
+TCP_MODE="atcp"                        #использовать режим advanced
+UDP_MODE="audp"                        #использовать режим advanced
+#/etc/portsentry/portsentry.conf
+BLOCK_UDP="1"                          #заблокировать сканирующего
+BLOCK_TCP="1"                          #заблокировать сканирующего
+```
+Использование atcp и audp обусловлено [мануалом](https://www.opennet.ru/docs/RUS/portsentry/portsentry4.html):  
+>Advanced Stealth Scan Detection
+Этот режим используется для проверки всех портов в промежутке от 1 до
+ADVANCED_PORT_TCP (для TCP) или ADVANCED_PORT_UDP (для UDP). Порты, открытые
+другими программами и перечисленные в ADVANCED_EXLUDE_TCP(для TCP) или
+ADVANCED_EXCLUDE_UDP(для UDP) исключаются из проверки. Любой хост, попытавшийся
+подключится к порту в этом промежутке, тут же блокируется. Самый удобный для
+использования метод, т.к. реакция на сканирование или подключение у этого метода
+самая быстрая, а также Portsentry в этом режиме использует меньше процессорного
+времени, чем в других. Задается опциями командной строки: -atcp - для TCP-портов
+и -audp - для UDP-портов.
+>
+Теперь можно сканировать порты:  
+```shell script
+#from host (192.168.1.66 is guest)
+nmap -v 192.168.1.66                            #IP гостя
+nmap -v -Pn -p 0-2000,60000 192.168.1.66
+```
+И если всё работает правильно, то:  
+```shell script
+#from guest
+cat /etc/hosts.deny
+#result:
+ALL: 192.162.1.65                               #IP хоста
+```
+Данную строку необходимо убрать из файла, иначе больше по ssh вы не подключитесь, и перезагрузить гостя.  
+## Отключение неиспользуемых сервисов
+Некоторые системные утилиты можно найти [тут](https://www.freedesktop.org/software/systemd/man/systemd.special.html).
+```shell script
+#from guest
+#systemctl list-unit-files | grep enabled
+apache2.service                        enabled          #apache web-server
+apparmor.service                       enabled          #менеджер профилей Линукса, можно сносить
+autovt@.service                        enabled          #что-то про запуск виртуальных терминалов, лучше оставить
+console-setup.service                  enabled          #настройки клавиатуры, шрифтов и т.д. - отключаем
+cron.service                           enabled          #планировщик событий
+dbus-org.freedesktop.timesync1.service enabled          #помогает сервисам внутри системы общаться друг с другом. можно снести
+fail2ban.service                       enabled          #оставить, это наш фаерволл
+getty@.service                         enabled          #нужно для логина, оставляем
+keyboard-setup.service                 enabled          #не удалось понять, зачем это, но вроде всё осталось по-прежнему
+networking.service                     enabled          #сеть, оставляем
+rsyslog.service                        enabled          #системные логи, оставляем
+ssh.service                            enabled          #ssh подключение, оставляем
+sshd.service                           enabled          #аналогично оставляем
+syslog.service                         enabled          #оставляем
+systemd-fsck-root.service              enabled-runtime  #часть системного пакета, не выключается
+systemd-timesyncd.service              enabled          #часть системного пакета утилит
+ufw.service                            enabled          #наш фаервол, оставляем
+remote-fs.target                       enabled          #нечто вроде порядка загрузки, позволяет загружаться с других устройств
+apt-daily-upgrade.timer                enabled          #можно выключить
+apt-daily.timer                        enabled          #можно выключить
+logrotate.timer                        enabled          #не стала отключать, делает копии логов, чтобы случайно не удалить текущий
+man-db.timer                           enabled          #часть db, мы его выключили, этот тоже выключаем
+```
+## Планировщик cron  
+### Скрипт обновления
+Скрипт в общем и целом должен выглядеть как `apt-get update && apt-get upgrade -y`
+с вашими опциальными дополнениями. Расположить его можно в `/etc/cron.d/`:
+```shell script
+#from guest ROOT:
+sudo touch /etc/cron.d/update_script.sh
+sudo chmod og-wrx /etc/cron.d/update_script.sh          #отобрать все права у всех, кроме владельца
+sudo chmod u+wrx /etc/cron.d/update_script.sh           #добавить все права владельцу, т.е. root
+grep PATH /etc/crontable                                #скопируйте результат
+crontable -e                                            #вставьте его сюда, этот файл может быть не в курсе переменных окружения
+#add:
+0 4 * * 1 /etc/cron.d/update_script.sh > /dev/null      # > /dev/null чтобы не отправлял отчёт на внутреннюю почту
+@reboot /etc/cron.d/update_script.sh > dev/null
+#to see all tasks for user:
+crontab -l
+```
+Можно, конечно, добавить те же правила в файл `/etc/crontable`, но к нему имеют доступ
+все, а вот к `crontable -e` извне добраться сложнее, тем более следующий пункт задания -
+отслеживать изменения в `/etc/crontable`, - нам тонко на это намекает.  
+### Скрипт отслеживания изменений  
+```shell script
+#from guest ROOT:
+sudo apt-get install sendmail -y                         #сервис по отправке писем
+sudo touch /etc/cron.d/cron_scan.sh
+sudo chmod og-wrx /etc/cron.d/cron_scan.sh
+sudo chmod u+wrx /etc/cron.d/cron_scan.sh
+#script:
+#!/bin/bash
+DIFF=$(diff /etc/crontab.bak /etc/crontab)
+cat /etc/crontab > /etc/crontab.bak
+if [ "$DIFF" != "" ]
+then
+	echo "Crontab was changed. Sending e-mail to root."
+	echo -e "CRONTAB WAS MODIFIED!!!\n$DIFF" | sendmail root
+else
+	echo "Crontab is unchanged."
+fi
+################################################################################
+crontab -e
+#add
+0 0   * * * /etc/cron.d/cron_scan.sh > /dev/null
+```
