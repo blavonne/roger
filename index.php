@@ -12,16 +12,21 @@
 		var map = document.createElement('div');
 		var btn = document.createElement('input');
 		var head = document.createElement('div');
+		var reset = document.createElement('input');
 
 		map.className = 'map';
 		head.className = 'head';
 		head.innerHTML = "Game of life";
 		btn.setAttribute("type", "button");
-		btn.setAttribute("value", "Still alive");
+		btn.setAttribute("value", "Let them still alive");
 		btn.addEventListener('click', chacha);
+		reset.setAttribute("type", "button");
+		reset.setAttribute("value", "Reset world");
+		reset.addEventListener('click', res_map);
 		document.body.appendChild(head);
 		document.body.appendChild(map);
 		document.body.appendChild(btn);
+		document.body.appendChild(reset);
 		for (i = 0; i < n; i++)
 		{
 			elements[i] = [];
@@ -191,6 +196,20 @@
 			{
 				window.clearInterval(currentInterval);
 				currentInterval = null;
+			}
+		}
+		function res_map()
+		{
+			for (i = 0; i < n; i++)
+			{
+				for (j = 0; j < n; j++)
+				{
+					if (elements[i][j].classList.contains('alive'))
+					{
+						elements[i][j].classList.remove('alive');
+						elements[i][j].classList.add('dead');
+					}
+				}
 			}
 		}
 	</script>
