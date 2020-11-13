@@ -39,7 +39,7 @@
 			{
 				elements[i][j].addEventListener('click', function(live)
 				{
-					if (currentInterval !== nulL)
+					if (currentInterval !== null)
 						return ;
 					live.target.classList.remove('dead');
 					live.target.classList.add('alive');
