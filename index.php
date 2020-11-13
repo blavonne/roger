@@ -43,12 +43,6 @@
 				}, false);
 			}
 		}
-		function qwe(elements)
-		{
-			if (elements[0][0].target.classList.contains('dead'))
-				alert("qweh");
-		}
-		qwe(elements);
 		function next_gen()
 		{
 			let friends;
@@ -58,95 +52,95 @@
 				friends = 0;
 				for (j = 0; j < n; j++)
 				{
-					if (elements[i][j].target.classList.contains('alive'))
+					if (elements[i][j].classList.contains('alive'))
 					{
 						if (i - 1 >= 0 && j - 1 >= 0)
 						{
-							if (elements[i - 1][j - 1].target.classList.contains('alive'))
+							if (elements[i - 1][j - 1].classList.contains('alive'))
 								friends++;
 						}
 						if (j - 1 >= 0)
 						{
-							if (elements[i][j - 1].target.classList.contains('alive'))
+							if (elements[i][j - 1].classList.contains('alive'))
 								friends++;
 						}
 						if (i + 1 < n && j - 1 >= 0)
 						{
-							if (elements[i + 1][j - 1].target.classList.contains('alive'))
+							if (elements[i + 1][j - 1].classList.contains('alive'))
 								friends++;
 						}
 						if (i - 1 >= 0)
 						{
-							if (elements[i - 1][j].target.classList.contains('alive'))
+							if (elements[i - 1][j].classList.contains('alive'))
 								friends++;
 						}
 						if (i - 1 >= 0 && j + 1 < n)
 						{
-							if (elements[i - 1][j + 1].target.classList.contains('alive'))
+							if (elements[i - 1][j + 1].classList.contains('alive'))
 								friends++;
 						}
 						if (j + 1 < n)
 						{
-							if (elements[i][j + 1].target.classList.contains('alive'))
+							if (elements[i][j + 1].classList.contains('alive'))
 								friends++;
 						}
 						if (i + 1 < n)
 						{
-							if (elements[i + 1][j].target.classList.contains('alive'))
+							if (elements[i + 1][j].classList.contains('alive'))
 								friends++;
 						}
 						if (i + 1 < n && j + 1 < n)
 						{
-							if (elements[i + 1][j + 1].target.classList.contains('alive'))
+							if (elements[i + 1][j + 1].classList.contains('alive'))
 								friends++;
 						}
 						if (friends < 2 || friends > 3)
-							elements[i][j].target.classList.add('can_die');
+							elements[i][j].classList.add('can_die');
 					}
-					else if (elements[i][j].target.classList.contains('dead'))
+					else if (elements[i][j].classList.contains('dead'))
 					{
 						if (i - 1 >= 0 && j - 1 >= 0)
 						{
-							if (elements[i - 1][j - 1].target.classList.contains('alive'))
+							if (elements[i - 1][j - 1].classList.contains('alive'))
 								friends++;
 						}
 						if (j - 1 >= 0)
 						{
-							if (elements[i][j - 1].target.classList.contains('alive'))
+							if (elements[i][j - 1].classList.contains('alive'))
 								friends++;
 						}
 						if (i + 1 < n && j - 1 >= 0)
 						{
-							if (elements[i + 1][j - 1].target.classList.contains('alive'))
+							if (elements[i + 1][j - 1].classList.contains('alive'))
 								friends++;
 						}
 						if (i - 1 >= 0)
 						{
-							if (elements[i - 1][j].target.classList.contains('alive'))
+							if (elements[i - 1][j].classList.contains('alive'))
 								friends++;
 						}
 						if (i - 1 >= 0 && j + 1 < n)
 						{
-							if (elements[i - 1][j + 1].target.classList.contains('alive'))
+							if (elements[i - 1][j + 1].classList.contains('alive'))
 								friends++;
 						}
 						if (j + 1 < n)
 						{
-							if (elements[i][j + 1].target.classList.contains('alive'))
+							if (elements[i][j + 1].classList.contains('alive'))
 								friends++;
 						}
 						if (i + 1 < n)
 						{
-							if (elements[i + 1][j].target.classList.contains('alive'))
+							if (elements[i + 1][j].classList.contains('alive'))
 								friends++;
 						}
 						if (i + 1 < n && j + 1 < n)
 						{
-							if (elements[i + 1][j + 1].target.classList.contains('alive'))
+							if (elements[i + 1][j + 1].classList.contains('alive'))
 								friends++;
 						}
 						if (friends == 3)
-							elements[i][j].target.classList.add('can_born');
+							elements[i][j].classList.add('can_born');
 					}
 				}
 			}
@@ -154,17 +148,17 @@
 			{
 				for (j = 0; j < n; j++)
 				{
-					if (elements[i][j].target.classList.contains('can_die'))
+					if (elements[i][j].classList.contains('can_die'))
 					{
-						elements[i][j].target.classList.remove('can_die');
-						elements[i][j].target.classList.remove('alive');
-						elements[i][j].target.classList.add('dead');
+						elements[i][j].classList.remove('can_die');
+						elements[i][j].classList.remove('alive');
+						elements[i][j].classList.add('dead');
 					}
-					else if (elements[i][j].target.classList.contains('can_born'))
+					else if (elements[i][j].classList.contains('can_born'))
 					{
-						elements[i][j].target.classList.remove('can_born');
-						elements[i][j].target.classList.remove('dead');
-						elements[i][j].target.classList.add('alive');
+						elements[i][j].classList.remove('can_born');
+						elements[i][j].classList.remove('dead');
+						elements[i][j].classList.add('alive');
 					}
 				}
 			}
@@ -175,19 +169,22 @@
 			{
 				for (j = 0; j < n; j++)
 				{
-					if (elements[i][j].target.classList.contains('alive'))
+					if (elements[i][j].classList.contains('alive'))
 						return true;
 				}
 			}
 			return false;
 		}
+		currentInterval = null;
 		function chacha()
 		{
-			if (elements[0][0].target.classList.contains('dead'))
-				alert("qwe");
-			window.setInterval(function() {
+			window.clearInterval(currentInterval);
+			currentInterval = window.setInterval(function()
+			{
 				if (stay_alive())
 					next_gen();
+				else
+					window.clearInterval(currentInterval);
 			}, 1000);
 		}
 	</script>
