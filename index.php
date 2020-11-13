@@ -178,14 +178,18 @@
 		currentInterval = null;
 		function chacha()
 		{
-			window.clearInterval(currentInterval);
-			currentInterval = window.setInterval(function()
+			if (currentInterval === null)
 			{
+				currentInterval = window.setInterval(function(ev) {
 				if (stay_alive())
 					next_gen();
-				else
-					window.clearInterval(currentInterval);
-			}, 1000);
+				}, 1000);
+			}
+			else
+			{
+				window.clearInterval(currentInterval);
+				currentInterval = null;
+			}
 		}
 	</script>
 </body>
