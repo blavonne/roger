@@ -18,7 +18,7 @@
 		head.innerHTML = "Game of life";
 		btn.setAttribute("type", "button");
 		btn.setAttribute("value", "Still alive");
-		btn.setAttribute("onclick", "chacha()");
+		btn.addEventListener('click', chacha);
 		document.body.appendChild(head);
 		document.body.appendChild(map);
 		document.body.appendChild(btn);
@@ -43,6 +43,12 @@
 				}, false);
 			}
 		}
+		function qwe(elements)
+		{
+			if (elements[0][0].target.classList.contains('dead'))
+				alert("qweh");
+		}
+		qwe(elements);
 		function next_gen()
 		{
 			let friends;
@@ -177,6 +183,8 @@
 		}
 		function chacha()
 		{
+			if (elements[0][0].target.classList.contains('dead'))
+				alert("qwe");
 			window.setInterval(function() {
 				if (stay_alive())
 					next_gen();
