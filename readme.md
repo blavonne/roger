@@ -438,3 +438,15 @@ crontab -e
 #add
 0 0   * * * /etc/cron.d/cron_scan.sh > /dev/null
 ```
+## Web-part
+SSL можно установить по [этому гайду](https://help.ubuntu.ru/wiki/apache_%D0%B8_https).  
+При посещении вашего сайта http будет заменено на https, и вам скорее всего скажут,
+что сертификат не настоящий. Это действительно так, и в Google Chrome можно нажать
+сверху слева на Nor secure, чтобы увидеть ваш самодельный сертификат с полями, которые
+вы заполняли в ходе установки.  
+Команда nmap с хоста теперь покажет, что порт 443 (https) открыт.  
+```shell script
+/etc/apache2/sites-available
+/etc/apache2/sites-enabled
+/var/www/barni21.com/public_html
+```
