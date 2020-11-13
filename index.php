@@ -18,10 +18,12 @@
 		head.className = 'head';
 		head.innerHTML = "Game of life";
 		btn.setAttribute("type", "button");
+		btn.setAttribute("id", "1");
 		btn.setAttribute("value", "Let them still alive");
 		btn.addEventListener('click', chacha);
 		reset.setAttribute("type", "button");
 		reset.setAttribute("value", "Reset world");
+		reset.setAttribute("id", "2");
 		reset.addEventListener('click', res_map);
 		document.body.appendChild(head);
 		document.body.appendChild(map);
