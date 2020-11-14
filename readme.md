@@ -442,9 +442,20 @@ crontab -e
 SSL можно установить по [этому гайду](https://help.ubuntu.ru/wiki/apache_%D0%B8_https).  
 При посещении вашего сайта http будет заменено на https, и вам скорее всего скажут,
 что сертификат не настоящий. Это действительно так, и в Google Chrome можно нажать
-сверху слева на Nor secure, чтобы увидеть ваш самодельный сертификат с полями, которые
+сверху слева на Not secure, чтобы увидеть ваш самодельный сертификат с полями, которые
 вы заполняли в ходе установки.  
-Команда nmap с хоста теперь покажет, что порт 443 (https) открыт.  
+Команда nmap с хоста теперь покажет, что порт 443 (https) открыт. Это нормально в общем-то,
+потому что какие-то порты должны быть открыты, ведь на них установлены серверы.  
+Для данейшей настройки я воспользовалась [этим гайдом](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-18-04-ru):  
+```shell script
+#from guest
+sudo mkdir /var/www/example.com/public_html
+sudo chmod -R 755 /var/www
+sudo touch /var/www/example.com/public_html/index.html
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf
+sed -ie '/^ServerAdmin/i ServerName example.com' /etc/sudoers
+sed -ie '/^ServerAdmin/i ServerAlias www.example.com' /etc/sudoers
+```
 ```shell script
 /etc/apache2/sites-available
 /etc/apache2/sites-enabled
