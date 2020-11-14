@@ -4,17 +4,17 @@ green=\\e[1\;32m
 rose=\\e[1\;1\;35m
 end_c=\\e[0m
 #-------------------------------------------------------------------------------
-echo -e "${rose}Updating system${end_c}"
+echo "${rose}Updating system${end_c}"
 sudo apt-get update && sudo apt-get upgrade -y
-echo -e "${green}[done]${end_c}"
-echo -e "${rose}Cloning from github${end_c}"
+echo "${green}[done]${end_c}"
+echo "${rose}Cloning from github${end_c}"
 git clone git@github.com:blavonne/roger.git
-echo -e "${green}[done]${end_c}"
-echo -e "${rose}Installing apache2 && php${end_c}"
+echo "${green}[done]${end_c}"
+echo "${rose}Installing apache2 && php${end_c}"
 sudo apt-get apache2 -y
 sudo apt install php libapache2-mod-php php -y
-echo -e "${green}[done]${end_c}"
-echo -e "${rose}Repair apache-config${end_c}"
+echo "${green}[done]${end_c}"
+echo "${rose}Repair apache-config${end_c}"
 sudo rm -rf /var/www/barni21.com
 sudo a2enmod ssl
 sudo cp -rf ./roger/Web-part/barni21.com/ /var/www/
@@ -25,9 +25,9 @@ sudo cp ./roger/Web-part/barni21.com.conf /etc/apache2/sites-available/
 sudo a2dissite 000-default.conf
 sudo a2ensite barni21.com
 sudo a2ensite barni21-ssl
-sudo cp -f /roger/dir.conf /etc/apache2/mods-eabled/
+sudo cp -f ./roger/Web-part/dir.conf /etc/apache2/mods-enabled/
 sudo systemctl restart apache2
-echo -e "${green}[done]${end_c}"
-echo -e "${rose}Cleaning${end_c}"
+echo "${green}[done]${end_c}"
+echo "${rose}Cleaning${end_c}"
 sudo rm -rf roger/
-echo -e "${green}[done]${end_c}"
+echo "${green}[done]${end_c}"
