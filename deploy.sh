@@ -23,15 +23,15 @@ echo -en "${rose}Repair apache-config [${end_c}"
 echo -en "${rose}.${end_c}"
 @sudo a2enmod ssl
 echo -en "${rose}.${end_c}"
-@sudo cp -rf ./roger/barni21.com/ /var/www/
+@sudo cp -rf ./roger/Web-part/barni21.com/ /var/www/
 echo -en "${rose}.${end_c}"
 @sudo rm -f /etc/apache2/sites-available/barni21-ssl.conf
 echo -en "${rose}.${end_c}"
-@sudo cp -f ./roger/barni21-ssl.conf /etc/apache2/sites-available/
+@sudo cp -f ./roger/Web-part/barni21-ssl.conf /etc/apache2/sites-available/
 echo -en "${rose}.${end_c}"
 @sudo rm -f /etc/apache2/sites-available/barni21.com.conf
 echo -en "${rose}.${end_c}"
-@sudo cp ./roger/barni21.com.conf /etc/apache2/sites-available/
+@sudo cp ./roger/Web-part/barni21.com.conf /etc/apache2/sites-available/
 echo -en "${rose}.${end_c}"
 @sudo a2dissite 000-default.conf
 echo -en "${rose}.${end_c}"
