@@ -11,7 +11,7 @@ echo "${rose}Cloning from github${end_c}"
 git clone git@github.com:blavonne/roger.git
 echo "${green}[done]${end_c}"
 echo "${rose}Installing apache2 && php${end_c}"
-sudo apt-get apache2 -y
+sudo apt-get install apache2 -y
 sudo apt install php libapache2-mod-php php -y
 echo "${green}[done]${end_c}"
 echo "${rose}Repair apache-config${end_c}"
@@ -25,7 +25,6 @@ sudo cp ./roger/Web-part/barni21.com.conf /etc/apache2/sites-available/
 sudo a2dissite 000-default.conf
 sudo a2ensite barni21.com
 sudo a2ensite barni21-ssl
-sudo cp -f ./roger/Web-part/dir.conf /etc/apache2/mods-enabled/
 sudo systemctl restart apache2
 echo "${green}[done]${end_c}"
 echo "${rose}Cleaning${end_c}"
