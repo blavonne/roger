@@ -1,7 +1,9 @@
+#!/bin/bash
+#colors-------------------------------------------------------------------------
 green=\\e[1\;32m
 rose=\\e[1\;1\;35m
 end_c=\\e[0m
-
+#-------------------------------------------------------------------------------
 echo -en "${rose}Updating system [${end_c}"
 @sudo apt-get update && apt-get upgrade -y
 echo -en "${rose}.] ${end_c}"
@@ -19,7 +21,13 @@ echo -e "${green}[done]${end_c}"
 echo -en "${rose}Repair apache-config [${end_c}"
 @sudo rm -rf /var/www/barni21.com
 echo -en "${rose}.${end_c}"
-@sudo cp -r ./roger/barni21.com/ /var/www/
+@sudo a2enmod ssl
+echo -en "${rose}.${end_c}"
+@sudo cp -rf ./roger/barni21.com/ /var/www/
+echo -en "${rose}.${end_c}"
+@sudo rm -f /etc/apache2/sites-available/barni21-ssl.conf
+echo -en "${rose}.${end_c}"
+@sudo cp -f ./roger/barni21-ssl.conf /etc/apache2/sites-available/
 echo -en "${rose}.${end_c}"
 @sudo rm -f /etc/apache2/sites-available/barni21.com.conf
 echo -en "${rose}.${end_c}"
@@ -27,9 +35,11 @@ echo -en "${rose}.${end_c}"
 echo -en "${rose}.${end_c}"
 @sudo a2dissite 000-default.conf
 echo -en "${rose}.${end_c}"
-@sudo a2ensite barni21.com.conf
+@sudo a2ensite barni21.com
 echo -en "${rose}.${end_c}"
-@sudo cp /roger/dir.conf /etc/apache2/mods-enabled/
+@sudo a2ensite barni21-ssl
+echo -en "${rose}.${end_c}"
+@sudo cp -f /roger/dir.conf /etc/apache2/mods-enabled/
 echo -en "${rose}.${end_c}"
 @sudo systemctl restart apache2
 echo -en "${rose}.] ${end_c}"

@@ -5,9 +5,10 @@
 ### Подготовка
 Устанавлиаем VirtualBox.  
 Устанавливаем гостевую машину, используя любой дистрибутив Linux.
-У меня это debian-10.6.0-amd64-netinst.iso размером 8 ГБ, с двумя точками монтирования
-/ (4.2 GB) и /home (оставшееся место), без desktop, обязательно с галочкой напротив
-ssh-manager (можно ещё web-server, но его можно поставить и позже).  
+У меня это debian-10.6.0-amd64-netinst.iso размером 8 GB (прописываем вручную 8 миллиардов
+байт), с двумя точками монтирования / (4.5 GB, берем с запасом, чтобы не заморачиваться)
+и /home (оставшееся место), без desktop, обязательно с галочкой напротив ssh-manager
+(можно ещё web-server, но его можно поставить и позже).  
 После установки убедитесь в размерности диска и разделов:
 ```shell script
 #from guest
@@ -27,7 +28,8 @@ Device     Boot   Start      End Sectors       Size Id Type
 /dev/sda5       9766912 15624191 5857280 2998927360 83 Linux
 ```
 В настройках машины в VirtualBox выбираем пункт Network, включаем адаптер Bridge. Выбор этого
-типа адаптера позволит использовать как Интернет, так и ssh.  
+типа адаптера позволит использовать как Интернет, так и ssh. Ознакомьтесь с [гайдом](http://rus-linux.net/MyLDP/vm/VirtualBox-networking.html)
+и сделайте выводы.  
 Запускаем гостевую систему и входим под юзером root.  
 Устанавливаем sudo и vim:  
 ```shell script
@@ -446,18 +448,5 @@ SSL можно установить по [этому гайду](https://help.ub
 вы заполняли в ходе установки.  
 Команда nmap с хоста теперь покажет, что порт 443 (https) открыт. Это нормально в общем-то,
 потому что какие-то порты должны быть открыты, ведь на них установлены серверы.  
-Для данейшей настройки я воспользовалась [этим гайдом](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-18-04-ru):  
-```shell script
-#from guest
-sudo mkdir /var/www/example.com/public_html
-sudo chmod -R 755 /var/www
-sudo touch /var/www/example.com/public_html/index.html
-sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf
-sed -ie '/^ServerAdmin/i ServerName example.com' /etc/sudoers
-sed -ie '/^ServerAdmin/i ServerAlias www.example.com' /etc/sudoers
-```
-```shell script
-/etc/apache2/sites-available
-/etc/apache2/sites-enabled
-/var/www/barni21.com/public_html
-```
+Для данейшей настройки я воспользовалась [этим гайдом](https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-18-04-ru).  
+Ну а вас впереди ожидает увлекательный творческий процесс по адресу `/var/www/`.
