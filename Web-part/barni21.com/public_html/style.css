@@ -1,0 +1,171 @@
+body::before {
+	z-index: -1; /*for buttons and refereces still work*/
+	content: "";
+	display: block;
+	width: 100%;
+	height: 100%;    
+	position: absolute;
+	top: 0;      
+	left: 0;   
+	background: transparent;
+	background-image: radial-gradient(rgba(255,255,255,0) 55%, rgba(32,33,49,1) 100%);
+	background-attachment: fixed;
+  	background-repeat: no-repeat;
+}
+
+body {
+  display: block;
+  background-image: url('/pic/bg.jpg');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: rgba(32,33,49,1);
+  background-position: center center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+         
+.form-signin {
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+	color: #017572;
+}
+         
+.form-signin .form-signin-heading, .form-signin .checkbox {
+	margin-bottom: 10px;
+}
+         
+.form-signin .checkbox {
+	font-weight: normal;
+}
+         
+.form-signin .form-control {
+	position: relative;
+	height: auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	font-size: 16px;
+}
+         
+.form-signin .form-control:focus {
+	z-index: 2;
+}
+         
+.form-signin input[type="email"] {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-color:#017572;
+}
+         
+.form-signin input[type="password"] {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-color:#017572;
+}
+         
+h2{
+	text-align: center;
+	color: #017572;
+}
+
+li {
+  list-style-type: none;
+  position: relative;
+  margin: 2px;
+  padding: 0.5em 0.5em 0.5em 2em;
+  background: lightgrey;
+  font-family: sans-serif;
+}
+
+li.done {
+  background: #CCFF99;
+}
+
+li.done::before {
+  content: '';
+  position: absolute;
+  border-color: #009933;
+  border-style: solid;
+  border-width: 0 0.3em 0.25em 0;
+  height: 1em;
+  top: 1.3em;
+  left: 0.6em;
+  margin-top: -1em;
+  transform: rotate(45deg);
+  width: 0.5em;
+}
+
+.head {
+	color: #ccaa00;
+	font-size: 35px;
+	font-family: 'Times New Roman', Times, serif;
+	font-weight: bold;
+	font-variant: small-caps;
+	position: absolute;
+	left: 35%;
+	top: 15%;
+	width: 582px;
+	height: 41px;
+	background-color: rgba(119, 119, 0, 0.7);
+	box-shadow: 0 0 10px rgba(70,100,0,0.5);
+	border: 1px dotted #444444;
+	padding: 2px 2px 2px 14px;
+}
+
+.map {
+	position: absolute;
+	top: 20%;
+	left: 35%;
+	background-color: #ffffff;
+	width: 600px;
+	height: 596px;
+	padding: 0;
+	margin: 0;
+}
+
+.dead {
+	background-color: #777700;
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+	border: 1px solid black;
+	padding: 0px;
+	margin-top: -4px;
+}
+
+.alive {
+	background-color: #ffff00;
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+	border: 1px solid black;
+	padding: 0px;
+	margin-top: -4px;
+}
+
+input {
+	font-size: 15px;
+	font-variant: small-caps;
+	font-family: 'Times New Roman', Times, serif;
+	position: absolute;
+}
+
+#start {
+	background-color: #777700;
+	color: black;
+	left: 48%;
+	top: 80%;
+	box-shadow: 0 0 10px rgba(170,200,0,0.8);
+}
+
+#reset {
+	background-color: #994400;
+	left: 60%;
+	top: 80%;
+	box-shadow: 0 0 10px rgba(230,220,0,0.8);
+}
