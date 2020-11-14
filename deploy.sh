@@ -20,10 +20,7 @@ sudo a2enmod ssl
 sudo cp -rf ./roger/Web-part/barni21.com/ /var/www/
 sudo rm -f /etc/apache2/sites-available/barni21-ssl.conf
 sudo cp -f ./roger/Web-part/barni21-ssl.conf /etc/apache2/sites-available/
-sudo rm -f /etc/apache2/sites-available/barni21.com.conf
-sudo cp ./roger/Web-part/barni21.com.conf /etc/apache2/sites-available/
 sudo a2dissite 000-default.conf
-sudo a2ensite barni21.com
 sudo a2ensite barni21-ssl
 sudo systemctl restart apache2
 echo "${green}[done]${end_c}"
